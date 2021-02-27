@@ -3,8 +3,9 @@ import "./ItemManager.sol";
 
 contract Item {
     uint256 public priceInWei;
-    uint256 public pricePaid;
     uint256 public index;
+
+    uint256 public pricePaid;
 
     ItemManager parentContract;
 

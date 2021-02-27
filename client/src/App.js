@@ -30,11 +30,10 @@ class App extends Component {
         && ItemContract.networks[networkId].address,
       );
       this.listenToPaymentEvent();
-      // Set web3, accounts, and contract to the state, and then proceed with an
-      // example of interacting with the contract's methods.
+
       this.setState({ loaded: true });
     } catch (error) {
-      // Catch any errors for any of the above operations.
+
       alert(
         `Failed to load web3, accounts, or contract. Check console for details.`,
       );
@@ -42,14 +41,15 @@ class App extends Component {
     }
   };
 
+
   listenToPaymentEvent = () => {
     let self = this;
-    this.ItemManager.events.SupplyChainSteps().on("message",
+    this.ItemManager.events.SupplyChainSteps().on("data",
       async function (evt) {
         console.log(evt);
         let itemObj = await self.ItemManager.methods
           .items(evt.returnValues._itemIndex).call();
-        console.log(itemObj);
+        alert("Item " + itemObj._identifier + " was paid, deliver it!");
       });
   }
 
@@ -62,12 +62,14 @@ class App extends Component {
     })
   }
 
+
+
   handleSubmit = async () => {
     const { cost, itemName } = this.state;
     console.log(itemName, cost, this.ItemManager);
     let result = await this.ItemManager.methods.createItem(itemName, cost).send({ from: this.accounts[0] });
     console.log(result);
-    alert("Send" + cost + " Wei to" + result.events.SupplyChainSteps.returnValues._itemAddress);
+    alert("Send " + cost + " Wei to " + result.events.SupplyChainSteps.returnValues._itemAddress);
   }
 
 
